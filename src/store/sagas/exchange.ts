@@ -18,6 +18,19 @@ function* exchangeSaga(action: ExchangeAction) {
   const writeOffPocketId = yield select(getExchangeWriteOffPocketId);
   const receivePocketId = yield select(getExchangeReceivePocketId);
 
+  if (writeOffPocketId === receivePocketId) {
+    yield put(setExchangeError('Please select different pockets for exchange.'));
+    return;
+  }
+
+  const writeOffPocket = pockets.find(({ id }) => id === writeOffPocketId);
+  const receivePocket = pockets.find(({ id }) => id === receivePocketId);
+
+  if (!receivePocket || !writeOffPocket) {
+    yield put(setExchangeError(`Something went wrong, try to refresh page`));
+    return;
+  }
+
   let writeOffAmount = yield select(getExchangeWriteOffAmount);
   let receiveAmount = yield select(getExchangeReceiveAmount);
 
@@ -29,21 +42,8 @@ function* exchangeSaga(action: ExchangeAction) {
     writeOffAmount = roundFloat(receiveAmount / exchangeRate);
   }
 
-  const writeOffPocket = pockets.find(({ id }) => id === writeOffPocketId);
-  const receivePocket = pockets.find(({ id }) => id === receivePocketId);
-
   if (!writeOffAmount && !receiveAmount) {
     yield put(setExchangeError('Please fill write off / receive amount field.'));
-    return;
-  }
-
-  if (writeOffPocketId === receivePocketId) {
-    yield put(setExchangeError('Please select different pockets for exchange.'));
-    return;
-  }
-
-  if (!receivePocket || !writeOffPocket) {
-    yield put(setExchangeError(`Something went wrong, try to refresh page`));
     return;
   }
 

@@ -38,7 +38,6 @@ export type State = {
     loading?: boolean;
     loaded?: boolean;
     error?: string;
-    base?: string | null;
   };
 
   exchange: {

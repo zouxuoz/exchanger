@@ -8,7 +8,7 @@ it('Should returns circular slice for the passed array, when start index lower t
   expect(result).toEqual([TEST_ARRAY[TEST_ARRAY.length - 1], TEST_ARRAY[0], TEST_ARRAY[1]]);
 });
 
-it('Should returns circular slice for the passed array, when start index greater then zero.', () => {
+it('Should returns circular slice for the passed array, when start index greater than zero.', () => {
   const result = circularSlice<string>(TEST_ARRAY, 0, 3);
 
   expect(result).toEqual(TEST_ARRAY.slice(0, 3));
